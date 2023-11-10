@@ -1,0 +1,11 @@
+  .labyrinth-container {
+    flex: 6; /* Ajustez le flex-grow ici pour changer la largeur relative */
+    padding: 5%;
+  }
+
+  .cell {
+    background-color: #000;
+    border: 1px solid #fff;
+    width: 100%;
+    height: 100%;
+  }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/menu.css">
+    <link rel="stylesheet" href="./css/labyrinth.css">
+    <title>Labyrinth solver</title>
+</head>
+<body>
+    <div class="container">
+        <div class="options-container">
+            <div class="input-container">
+                <label for="generationMethod">Maze algorithm builder</label>
+                <select id="dropdown" required="required">
+                    <option value="prim">Prim</option>
+                    <option value="dfs">Deep First Search</option>
+                </select>
+            </div>
+            <div class="input-container">
+                <label for="algorithm">Algorithm solver</label>
+                <select id="dropdown2" required="required">
+                    <option value="astar">#empty</option>
+                </select>
+            </div>
+            <div class="input-container-button">
+                <Button id="generateMaze">Start</Button>
+                <Button id="resetMaze">Reset</Button>
+              </div>
+        </div>
+        <canvas class="labyrinth-container">
+        </canvas>
+    </div>
+    <script src="./js/maze.js"></script>
+</body>
+</html>

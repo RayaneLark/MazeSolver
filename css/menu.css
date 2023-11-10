@@ -1,0 +1,69 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .container {
+    display: flex;
+    flex: 1;
+    height: 100vh;
+    width: 100vw;
+  }
+  
+  .options-container {
+    padding: 20px;
+    flex: 2;
+    background-color: white;
+    border-right: 1px solid #c9cfd8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px; /* Alignez verticalement les éléments dans .options-container */
+  }
+
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Alignez verticalement les éléments dans .options-container */ 
+  }
+
+  .input-container label {
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
+  }
+
+  .input-container select {
+	padding: 7px 40px 7px 12px;
+	width: 300px;
+	border: 1px solid #c9cfd8;
+	border-radius: 5px;
+	background: #fff;
+	box-shadow: 0 1px 3px -2px #9098a9;
+	cursor: pointer;
+    outline: none;
+	font-family: inherit;
+	font-size: 18px;
+	transition: all 150ms ease;
+	box-sizing: border-box;
+	color: #404d68;
+  }
+
+  .input-container-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .input-container-button button {
+    width: 60px;
+    height: 30px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
