@@ -1,4 +1,6 @@
 # MazeSolver
+
+A simple web-based maze generator implemented in JavaScript using two algorithms: Prim's algorithm and Depth-First Search (DFS). The generated maze is displayed on an HTML5 canvas, and you can navigate through it by moving a red dot.
  
 <img width="1710" alt="image" src="https://github.com/RayaneLark/MazeSolver/assets/89400140/836c698e-7655-43b5-a502-1058b0650f81">
 
