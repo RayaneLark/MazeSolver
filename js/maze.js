@@ -9,6 +9,8 @@ let generationComplete = false;
 let start
 let current;
 let goal;
+let stepsCount = 0;
+let goalReached = false;
 
 /**
  * Represents a maze.
@@ -25,6 +27,7 @@ class Maze {
     this.columns = columns;         // Number of columns
     this.rows = rows;               // Number of rows
     this.grid = [];                 // Grid to store cells
+    this.initialCell = undefined    // Initial cell
     this.visitedCells = new Set();  // Set to keep track of visited cells during maze generation
     this.frontierCells = new Set(); // Set to keep track of frontier cells during maze generation
     this.stack = [];                // Stack to keep track of cells during maze generation
@@ -52,9 +55,10 @@ class Maze {
     }
 
     // Set a random cell as the starting point
-    start = this.grid[Math.floor(Math.random() * this.rows)][Math.floor(Math.random() * this.columns)];
+    this.initialCell = this.grid[Math.floor(Math.random() * this.rows)][Math.floor(Math.random() * this.columns)];
     // Set the starting cell as the current cell
-    current = start;
+    start = this.initialCell;
+    current = start
     // Set the end cell as the goal
     this.grid[this.rows - 1][this.columns - 1].goal = true;
   }
@@ -216,6 +220,7 @@ class Cell {
     }
   }
 
+  // Draw the red dot to indicate the starting position
   drawStart(size, columns, rows) {
     const x = (this.colNum * size) / columns + size / (2 * columns);
     const y = (this.rowNum * size) / rows + size / (2 * rows);
@@ -300,16 +305,43 @@ class Cell {
   }
 }
 
+
+
+// When the DOM is loaded, add an event listener to the "Start" button
 document.addEventListener("DOMContentLoaded", function () {
   // Add an event listener to the "Start" button
   const generateMazeButton = document.getElementById("generateMaze");
+  const mazeSizeMenu = document.getElementById("mazeSize");
+  let size;
+
+  // Liste des tailles que vous souhaitez prendre en charge
+  const availableSizes = [5, 10, 15, 20, 30, 50, 70];
+
+  // Remplissez dynamiquement le sélecteur avec les options
+  availableSizes.forEach(size => {
+    const option = document.createElement("option");
+    option.value = size;
+    option.text = `${size}x${size}`;
+    mazeSizeMenu.add(option);
+  });
+
+  mazeSizeMenu.addEventListener("change", function () {
+    // Mettez à jour la variable size lorsque la taille du labyrinthe est modifiée
+    size = this.value;
+  });
 
   generateMazeButton.addEventListener("click", function () {
     // Get the selected algorithm from the dropdown menu
     const menu = document.getElementById("dropdown");
     const selectedAlgorithm = menu.value;
 
-    newMaze = new Maze(3000, 25, 25);
+     // Si la taille n'a pas été sélectionnée, utilisez la première taille de la liste
+     if (!size) {
+      size = availableSizes[0];
+      mazeSizeMenu.value = size;
+    }
+
+    newMaze = new Maze(3000, size, size);
     newMaze.setup(); // Setup and draw the maze initially
 
     // Choose the algorithm based on the user's selection
@@ -321,4 +353,81 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+// When the DOM is loaded, add an event listener to the "Reset" button
+document.addEventListener("DOMContentLoaded", function () {
+  // Get the "Reset" button by its ID
+  const resetMazeButton = document.getElementById("resetMaze");
 
+  // Add an event listener for the "Reset" button click
+  resetMazeButton.addEventListener("click", function () {
+    // Reset the starting position to the beginning of the maze
+    start = newMaze.initialCell;
+
+    // Clear the canvas and redraw the maze with the new starting position
+    ctx.clearRect(0, 0, maze.width, maze.height);
+    newMaze.draw();
+    start.drawStart(newMaze.size, newMaze.columns, newMaze.rows);
+
+    // Reset goalReached to false
+    goalReached = false;
+
+    // Reset the stepsCount to zero
+    stepsCount = 0;
+  });
+});
+
+
+
+// When the DOM is loaded, add an event listener to move the red dot with the arrow keys
+document.addEventListener("keydown", function(event) {
+  // Check if the goal has already been reached
+  if (goalReached) {
+    return;  // Exit the function if the goal has already been reached
+  }
+
+  const stepSize = newMaze.size / newMaze.columns;
+
+  switch (event.key) {
+    case "ArrowUp":
+      // Move up if there is no top wall
+      if (start.rowNum > 0 && !start.walls.topWall) {
+        start = newMaze.grid[start.rowNum - 1][start.colNum];
+        stepsCount++;
+      }
+      break;
+    case "ArrowDown":
+      // Move down if there is no bottom wall
+      if (start.rowNum < newMaze.rows - 1 && !start.walls.bottomWall) {
+        start = newMaze.grid[start.rowNum + 1][start.colNum];
+        stepsCount++;
+      }
+      break;
+    case "ArrowLeft":
+      // Move left if there is no left wall
+      if (start.colNum > 0 && !start.walls.leftWall) {
+        start = newMaze.grid[start.rowNum][start.colNum - 1];
+        stepsCount++;
+      }
+      break;
+    case "ArrowRight":
+      // Move right if there is no right wall
+      if (start.colNum < newMaze.columns - 1 && !start.walls.rightWall) {
+        start = newMaze.grid[start.rowNum][start.colNum + 1];
+        stepsCount++;
+      }
+      break;
+    default:
+      break;
+  }
+
+  // Clear the canvas and redraw the maze with the new starting position
+  ctx.clearRect(0, 0, maze.width, maze.height);
+  newMaze.draw();
+  start.drawStart(newMaze.size, newMaze.columns, newMaze.rows);
+
+  // Check if the goal is reached
+  if (start.goal) {
+    goalReached = true;  // Set the variable to true to not display the message again
+    alert(`Congratulations! You reached the goal in ${stepsCount} steps.`);
+  }
+});
