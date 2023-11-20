@@ -60,7 +60,7 @@ class Maze {
     start = this.initialCell;
     current = start
     // Set the goal
-    this.grid[Math.floor(Math.random() * this.rows][Math.floor(Math.random() * this.columns)].goal = true;
+    this.grid[Math.floor(Math.random() * this.rows)][Math.floor(Math.random() * this.columns)].goal = true;
   }
 
   /**
